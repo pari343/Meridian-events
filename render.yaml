@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: meridian-events-api
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm run start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATA_DIR
+        value: /tmp/meridian-data
+      - key: ALLOWED_ORIGINS
+        sync: false

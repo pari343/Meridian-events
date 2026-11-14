@@ -8,6 +8,7 @@ import type {
 } from '../types/platform.ts';
 import { CURRENCY_LIST, CURRENCIES, formatMoney, getMidMarketRate } from '../lib/currencies.ts';
 import { QrCodeMatrix } from './QrCodeMatrix.tsx';
+import { apiUrl } from '../lib/api.ts';
 
 interface ShareExchangeHubProps {
   events: EventItem[];
@@ -84,7 +85,7 @@ export const ShareExchangeHub: React.FC<ShareExchangeHubProps> = ({
     }
     setFxLoading(true);
     try {
-      const res = await fetch('/api/fx/exchange', {
+      const res = await fetch(apiUrl('/api/fx/exchange'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -122,7 +123,7 @@ export const ShareExchangeHub: React.FC<ShareExchangeHubProps> = ({
     setShareError(null);
     setShareLoading(true);
     try {
-      const res = await fetch('/api/shares', {
+      const res = await fetch(apiUrl('/api/shares'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

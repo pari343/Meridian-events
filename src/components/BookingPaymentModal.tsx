@@ -20,6 +20,7 @@ import type {
 } from '../types/platform.ts';
 import { CURRENCY_LIST, convertCurrency, formatMoney } from '../lib/currencies.ts';
 import { QrCodeMatrix } from './QrCodeMatrix.tsx';
+import { apiUrl } from '../lib/api.ts';
 
 interface BookingPaymentModalProps {
   event: EventItem;
@@ -106,7 +107,7 @@ export const BookingPaymentModal: React.FC<BookingPaymentModalProps> = ({
       setIntentLoading(true);
       setErrorMsg(null);
       try {
-        const res = await fetch('/api/payments/intent', {
+        const res = await fetch(apiUrl('/api/payments/intent'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -177,7 +178,7 @@ export const BookingPaymentModal: React.FC<BookingPaymentModalProps> = ({
     setThreeDsStage(false);
 
     try {
-      const res = await fetch('/api/payments/process', {
+      const res = await fetch(apiUrl('/api/payments/process'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -263,7 +264,7 @@ export const BookingPaymentModal: React.FC<BookingPaymentModalProps> = ({
           </span>
           <span className="text-zinc-700">/</span>
           <span className={step === 'payment' ? 'text-amber-400' : 'text-zinc-500'}>
-            02. Secure Payment Gateway
+            02. Demo Payment Simulation
           </span>
           <span className="text-zinc-700">/</span>
           <span className={step === 'confirmed' ? 'text-emerald-400' : 'text-zinc-500'}>
@@ -506,10 +507,13 @@ export const BookingPaymentModal: React.FC<BookingPaymentModalProps> = ({
           {step === 'payment' && intent && (
             <form onSubmit={handleProcessPayment} className="grid grid-cols-1 md:grid-cols-[1.25fr_1fr] gap-6">
               <div className="space-y-5">
+                <p role="note" className="rounded-lg border border-amber-700 bg-amber-950/50 px-3 py-2.5 text-xs leading-relaxed text-amber-200">
+                  Demo only: no real money is charged. Do not enter real card numbers, CVCs, UPI PINs, or banking credentials. Use the sample test details shown in this demo.
+                </p>
                 <div className="flex items-center justify-between gap-3">
                   <div className="flex items-center gap-2 text-xs font-medium text-zinc-300">
                     <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                    <span>256-bit TLS Encrypted Checkout · Intent {intent.id}</span>
+                    <span>Demo payment simulation · Intent {intent.id}</span>
                   </div>
                   <button
                     type="button"

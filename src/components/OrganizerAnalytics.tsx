@@ -13,6 +13,7 @@ import {
 import type { AnalyticsSnapshot, EventItem } from '../types/platform.ts';
 import { formatMoney } from '../lib/currencies.ts';
 import { INDIAN_STATES_AND_UTS } from '../lib/indianStates.ts';
+import { apiUrl } from '../lib/api.ts';
 
 interface OrganizerAnalyticsProps {
   events: EventItem[];
@@ -54,7 +55,7 @@ export const OrganizerAnalytics: React.FC<OrganizerAnalyticsProps> = ({
 
   const fetchAnalytics = useCallback(async (selectedRange: '24h' | '7d' | '30d') => {
     try {
-      const res = await fetch(`/api/analytics?range=${selectedRange}`);
+      const res = await fetch(apiUrl(`/api/analytics?range=${selectedRange}`));
       const data = await res.json();
       if (res.ok && data.analytics) {
         setAnalytics(data.analytics);
@@ -72,7 +73,7 @@ export const OrganizerAnalytics: React.FC<OrganizerAnalyticsProps> = ({
   }, [range, fetchAnalytics]);
 
   useEffect(() => {
-    const es = new EventSource('/api/analytics/stream');
+    const es = new EventSource(apiUrl('/api/analytics/stream'));
 
     es.addEventListener('connected', (evt) => {
       setSseConnected(true);
@@ -114,7 +115,7 @@ export const OrganizerAnalytics: React.FC<OrganizerAnalyticsProps> = ({
   const handleRefund = async (txnId: string) => {
     setActionBusyId(txnId);
     try {
-      const res = await fetch(`/api/transactions/${txnId}/refund`, { method: 'POST' });
+      const res = await fetch(apiUrl(`/api/transactions/${txnId}/refund`), { method: 'POST' });
       if (res.ok) {
         await fetchAnalytics(range);
         onEventsUpdated();
@@ -127,7 +128,7 @@ export const OrganizerAnalytics: React.FC<OrganizerAnalyticsProps> = ({
   const handleCheckIn = async (bookingId: string) => {
     setActionBusyId(bookingId);
     try {
-      const res = await fetch(`/api/bookings/${bookingId}/checkin`, { method: 'POST' });
+      const res = await fetch(apiUrl(`/api/bookings/${bookingId}/checkin`), { method: 'POST' });
       if (res.ok) {
         await fetchAnalytics(range);
       }
@@ -181,7 +182,7 @@ export const OrganizerAnalytics: React.FC<OrganizerAnalyticsProps> = ({
     }
     setCreating(true);
     try {
-      const res = await fetch('/api/events', {
+      const res = await fetch(apiUrl('/api/events'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
