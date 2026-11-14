@@ -2,7 +2,7 @@ services:
   - type: web
     name: meridian-events-api
     runtime: node
-    plan: starter
+    plan: free
     buildCommand: npm install
     startCommand: npm run start
     healthCheckPath: /api/health
@@ -10,10 +10,6 @@ services:
       - key: NODE_ENV
         value: production
       - key: DATA_DIR
-        value: /var/data
+        value: /tmp/meridian-data
       - key: ALLOWED_ORIGINS
         sync: false
-    disk:
-      name: meridian-events-data
-      mountPath: /var/data
-      sizeGB: 1
