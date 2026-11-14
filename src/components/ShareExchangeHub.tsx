@@ -85,7 +85,7 @@ export const ShareExchangeHub: React.FC<ShareExchangeHubProps> = ({
     }
     setFxLoading(true);
     try {
-      const res = await fetch(apiUrl('/api/fx/exchange', {
+      const res = await fetch(apiUrl('/api/fx/exchange'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -123,7 +123,7 @@ export const ShareExchangeHub: React.FC<ShareExchangeHubProps> = ({
     setShareError(null);
     setShareLoading(true);
     try {
-      const res = await fetch(apiUrl('/api/shares', {
+      const res = await fetch(apiUrl('/api/shares'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
