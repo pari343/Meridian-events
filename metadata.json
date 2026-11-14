@@ -1,0 +1,6 @@
+{
+  "name": "Meridian Pass",
+  "description": "Event booking platform with multi-currency share and money exchange, secure payment gateway processing, and real-time organizer analytics.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
