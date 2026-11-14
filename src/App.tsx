@@ -9,6 +9,7 @@ import type {
   TransactionRecord,
 } from './types/platform.ts';
 import { CURRENCY_LIST, formatMoney } from './lib/currencies.ts';
+import { apiUrl } from './lib/api.ts';
 import { INDIAN_STATES_AND_UTS } from './lib/indianStates.ts';
 import { Navbar, type ActiveView } from './components/Navbar.tsx';
 import { EventImage } from './components/EventImage.tsx';
@@ -46,7 +47,7 @@ export default function App() {
 
   const loadData = useCallback(async () => {
     try {
-      const [evRes, bkRes] = await Promise.all([fetch('/api/events'), fetch('/api/bookings')]);
+      const [evRes, bkRes] = await Promise.all([fetch(apiUrl('/api/events')), fetch(apiUrl('/api/bookings'))]);
       const evData = await evRes.json();
       const bkData = await bkRes.json();
       if (evRes.ok && evData.events) setEvents(evData.events);
@@ -66,7 +67,7 @@ export default function App() {
     const params = new URLSearchParams(window.location.search);
     const shareCode = params.get('share');
     if (shareCode) {
-      fetch(`/api/shares/${encodeURIComponent(shareCode)}`)
+      fetch(apiUrl(`/api/shares/${encodeURIComponent(shareCode)}`))
         .then((r) => (r.ok ? r.json() : null))
         .then((data) => {
           if (data?.shareLink) {
