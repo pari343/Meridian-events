@@ -107,7 +107,7 @@ export const BookingPaymentModal: React.FC<BookingPaymentModalProps> = ({
       setIntentLoading(true);
       setErrorMsg(null);
       try {
-        const res = await fetch(apiUrl('/api/payments/intent', {
+        const res = await fetch(apiUrl('/api/payments/intent'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -178,7 +178,7 @@ export const BookingPaymentModal: React.FC<BookingPaymentModalProps> = ({
     setThreeDsStage(false);
 
     try {
-      const res = await fetch(apiUrl('/api/payments/process', {
+      const res = await fetch(apiUrl('/api/payments/process'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
