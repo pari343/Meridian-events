@@ -20,6 +20,7 @@ import type {
 } from '../types/platform.ts';
 import { CURRENCY_LIST, convertCurrency, formatMoney } from '../lib/currencies.ts';
 import { QrCodeMatrix } from './QrCodeMatrix.tsx';
+import { apiUrl } from '../lib/api.ts';
 
 interface BookingPaymentModalProps {
   event: EventItem;
@@ -106,7 +107,7 @@ export const BookingPaymentModal: React.FC<BookingPaymentModalProps> = ({
       setIntentLoading(true);
       setErrorMsg(null);
       try {
-        const res = await fetch('/api/payments/intent', {
+        const res = await fetch(apiUrl('/api/payments/intent', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -177,7 +178,7 @@ export const BookingPaymentModal: React.FC<BookingPaymentModalProps> = ({
     setThreeDsStage(false);
 
     try {
-      const res = await fetch('/api/payments/process', {
+      const res = await fetch(apiUrl('/api/payments/process', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
