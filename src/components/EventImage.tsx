@@ -1,21 +1,36 @@
 import React, { useState } from 'react';
 import { Calendar } from 'lucide-react';
 
-// Resolve source asset paths through Vite so images keep working after production builds.
-const localImages = import.meta.glob('../assets/images/*.{jpg,jpeg,png,webp}', {
+// Vite turns each local image into its final production URL (including hashed filenames).
+// Match by basename because event records may contain either /src/... paths or plain filenames.
+const imageModules = import.meta.glob('../assets/images/*', {
   eager: true,
   query: '?url',
   import: 'default',
 }) as Record<string, string>;
 
+const imageUrlsByFilename = Object.fromEntries(
+  Object.entries(imageModules).map(([path, url]) => [
+    (path.split('/').pop() ?? '').toLowerCase(),
+    url,
+  ])
+) as Record<string, string>;
+
 function resolveImageSource(src: string): string {
   if (!src) return '';
+
+  // Keep external, data, and blob image URLs unchanged.
   if (/^(https?:|data:|blob:)/i.test(src)) return src;
 
-  const filename = src.split(/[/?#]/).filter(Boolean).pop();
-  if (!filename) return src;
+  const rawFilename = src.split(/[/?#]/).filter(Boolean).pop() ?? '';
+  let filename = rawFilename;
+  try {
+    filename = decodeURIComponent(rawFilename);
+  } catch {
+    // Keep the original filename if it contains malformed URL encoding.
+  }
 
-  return localImages[`../assets/images/${filename}`] ?? src;
+  return imageUrlsByFilename[filename.toLowerCase()] ?? '';
 }
 
 interface EventImageProps {
